@@ -1,0 +1,6 @@
+.idea/*
+out/*
+models/*
+*.iml
+src/META-INF/*
+build/production/*
