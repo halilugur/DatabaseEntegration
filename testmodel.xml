@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<database xmlns="http://db.apache.org/ddlutils/schema/1.1" name="unnamed">
+    <table name="address" description="">
+        <column name="AddressID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+        <column name="AddressTypeID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+        <column name="ObjectID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+        <column name="ObjectInstanceID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+        <column name="Value" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
+        <column name="CreatedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="ModifiedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <foreign-key foreignTable="addresstype" name="Address_AddressType_FK" onUpdate="restrict" onDelete="restrict">
+            <reference local="AddressTypeID" foreign="AddressTypeID"/>
+        </foreign-key>
+        <foreign-key foreignTable="object" name="Address_ObjectID_FK" onUpdate="restrict" onDelete="restrict">
+            <reference local="ObjectID" foreign="ObjectID"/>
+        </foreign-key>
+        <unique name="Address_AddressTypeID_ObjectID_ObjectInstanceID_UN">
+            <unique-column name="AddressTypeID"/>
+            <unique-column name="ObjectID"/>
+            <unique-column name="ObjectInstanceID"/>
+        </unique>
+        <index name="Address_ObjectID_ObjectInstanceID_AddressTypeID_IX">
+            <index-column name="ObjectID"/>
+            <index-column name="ObjectInstanceID"/>
+            <index-column name="AddressTypeID"/>
+        </index>
+    </table>
+    <table name="addresstype" description="">
+        <column name="AddressTypeID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+        <column name="AddressType" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+        <column name="CreatedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="ModifiedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <unique name="AddressType_AddressType_UN">
+            <unique-column name="AddressType"/>
+        </unique>
+        <index name="AddressType_AddressType_IX">
+            <index-column name="AddressType"/>
+        </index>
+    </table>
+    <table name="department" description="">
+        <column name="DepartmentID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+        <column name="DepartmentName" primaryKey="false" required="true" type="VARCHAR" size="200"
+                autoIncrement="false"/>
+        <column name="ParentDepartmentID" primaryKey="false" required="true" type="INTEGER" size="10"
+                autoIncrement="false"/>
+        <column name="TenantID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+        <column name="CreatedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="ModifiedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <foreign-key foreignTable="tenant" name="Department_TenantID_FK" onUpdate="restrict" onDelete="restrict">
+            <reference local="TenantID" foreign="TenantID"/>
+        </foreign-key>
+        <unique name="Department_DepartmentName_TenantID_UN">
+            <unique-column name="DepartmentName"/>
+            <unique-column name="TenantID"/>
+        </unique>
+        <index name="Department_TenantID_DepartmentName">
+            <index-column name="TenantID"/>
+            <index-column name="DepartmentName"/>
+        </index>
+    </table>
+    <table name="object" description="">
+        <column name="ObjectID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+        <column name="ObjectName" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+        <unique name="Object_ObjectName_UN">
+            <unique-column name="ObjectName"/>
+        </unique>
+        <index name="Object_ObjectName_IX">
+            <index-column name="ObjectName"/>
+        </index>
+    </table>
+    <table name="person" description="">
+        <column name="PersonID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+        <column name="FirstName" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+        <column name="LastName" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+        <column name="Gender" primaryKey="false" required="true" type="BIT" autoIncrement="false"/>
+        <column name="DateOfBirth" primaryKey="false" required="true" type="DATE" size="10" autoIncrement="false"/>
+        <column name="IsActive" primaryKey="false" required="true" type="BIT" autoIncrement="false"/>
+        <column name="PersonTypeID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+        <column name="DepartmentID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+        <column name="TenantID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+        <column name="CreatedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="ModifiedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <foreign-key foreignTable="department" name="Person_DepartmentID_FK" onUpdate="restrict" onDelete="restrict">
+            <reference local="DepartmentID" foreign="DepartmentID"/>
+        </foreign-key>
+        <foreign-key foreignTable="persontype" name="Person_PersonTypeID_FK" onUpdate="restrict" onDelete="restrict">
+            <reference local="PersonTypeID" foreign="PersonTypeID"/>
+        </foreign-key>
+        <foreign-key foreignTable="tenant" name="Person_TenantID_FK" onUpdate="restrict" onDelete="restrict">
+            <reference local="TenantID" foreign="TenantID"/>
+        </foreign-key>
+        <index name="Person_TenantID_DepartmentID_Per_eID_FirstName_LastName_IsActive">
+            <index-column name="TenantID"/>
+            <index-column name="DepartmentID"/>
+            <index-column name="PersonTypeID"/>
+            <index-column name="FirstName"/>
+            <index-column name="LastName"/>
+            <index-column name="IsActive"/>
+        </index>
+    </table>
+    <table name="persontype" description="">
+        <column name="PersonTypeID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+        <column name="Type" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+        <unique name="PersonType_TYPE_UN">
+            <unique-column name="Type"/>
+        </unique>
+        <index name="PersonType_Type_IX">
+            <index-column name="Type"/>
+        </index>
+    </table>
+    <table name="tenant" description="">
+        <column name="TenantID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+        <column name="TenantName" primaryKey="false" required="true" type="VARCHAR" size="500" autoIncrement="false"/>
+        <column name="UrlParameter" primaryKey="false" required="true" type="VARCHAR" size="500" autoIncrement="false"/>
+        <column name="CreatedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="ModifiedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <unique name="Tenant_TenantName_UN">
+            <unique-column name="TenantName"/>
+        </unique>
+        <unique name="Tenant_UrlParameter_UN">
+            <unique-column name="UrlParameter"/>
+        </unique>
+        <index name="Tenant_TenantName_IX">
+            <index-column name="TenantName"/>
+        </index>
+    </table>
+</database>
