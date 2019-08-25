@@ -81,6 +81,7 @@ public class CloneHelper
         result.setCatalog(source.getCatalog());
         result.setSchema(source.getSchema());
         result.setName(source.getName());
+        result.setJavaName(source.getJavaName());
         result.setType(source.getType());
 
         for (int colIdx = 0; colIdx < source.getColumnCount(); colIdx++)
@@ -120,6 +121,7 @@ public class CloneHelper
         result.setName(source.getName());
         result.setJavaName(source.getJavaName());
         result.setPrimaryKey(clonePrimaryKeyStatus ? source.isPrimaryKey() : false);
+        result.setForeignKey(source.isForeignKey());
         result.setRequired(source.isRequired());
         result.setAutoIncrement(source.isAutoIncrement());
         result.setTypeCode(source.getTypeCode());

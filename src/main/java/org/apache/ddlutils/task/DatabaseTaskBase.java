@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
+import com.ugurhalil.ModelGenerator;
+import com.ugurhalil.configuration.HibernateConfig;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +38,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+
 
 /**
  * Base class for DdlUtils Ant tasks that operate on a database.
@@ -56,6 +59,8 @@ public abstract class DatabaseTaskBase extends Task
     private boolean _simpleLogging = true;
     /** The verbosity of the task's debug output. */
     private VerbosityLevel _verbosity = null;
+
+    private HibernateConfig hibernateConfig;
 
     /**
      * Specifies whether simple logging (configured by the task via the <code>verbosity</code>
@@ -342,6 +347,11 @@ public abstract class DatabaseTaskBase extends Task
         }
     }
 
+    public HibernateConfig createHibernateConfig(){
+        hibernateConfig = new HibernateConfig();
+        return hibernateConfig;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -378,7 +388,9 @@ public abstract class DatabaseTaskBase extends Task
 
         try
         {
-            executeCommands(readModel());
+            Database database = readModel();
+            ModelGenerator.getInstance(database, hibernateConfig).execute();
+            executeCommands(database);
         }
         finally
         {

@@ -93,6 +93,8 @@ public class DatabaseIO
     public static final QName QNAME_ATTRIBUTE_DESCRIPTION       = new QName(DDLUTILS_NAMESPACE, "description");
     /** Qualified name of the foreign attribute. */
     public static final QName QNAME_ATTRIBUTE_FOREIGN           = new QName(DDLUTILS_NAMESPACE, "foreign");
+    /** Qualified name of the foreignKey attribute. */
+    public static final QName QNAME_ATTRIBUTE_FOREIGN_KEY       = new QName(DDLUTILS_NAMESPACE, "foreignKey");
     /** Qualified name of the foreignTable attribute. */
     public static final QName QNAME_ATTRIBUTE_FOREIGN_TABLE     = new QName(DDLUTILS_NAMESPACE, "foreignTable");
     /** Qualified name of the javaName attribute. */
@@ -427,6 +429,10 @@ public class DatabaseIO
             {
                 table.setDescription(xmlReader.getAttributeValue(idx));
             }
+            else if (isSameAs(attrQName, QNAME_ATTRIBUTE_JAVA_NAME))
+            {
+                table.setJavaName(xmlReader.getAttributeValue(idx));
+            }
         }
         readTableSubElements(xmlReader, table);
         consumeRestOfElement(xmlReader);
@@ -523,6 +529,10 @@ public class DatabaseIO
             else if (isSameAs(attrQName, QNAME_ATTRIBUTE_JAVA_NAME))
             {
                 column.setJavaName(xmlReader.getAttributeValue(idx));
+            }
+            else if (isSameAs(attrQName, QNAME_ATTRIBUTE_FOREIGN_KEY))
+            {
+                column.setForeignKey(getAttributeValueAsBoolean(xmlReader, idx));
             }
         }
         consumeRestOfElement(xmlReader);

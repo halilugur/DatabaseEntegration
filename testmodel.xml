@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<database xmlns="http://db.apache.org/ddlutils/schema/1.1" name="unnamed">
-    <table name="address" description="">
+<database xmlns="http://db.apache.org/ddlutils/schema/1.1" name="testDatabase">
+    <table name="address" description="" javaName="Address">
         <column name="AddressID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-        <column name="AddressTypeID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-        <column name="ObjectID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-        <column name="ObjectInstanceID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-        <column name="Value" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
-        <column name="CreatedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
-        <column name="ModifiedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="AddressTypeID" required="true" type="INTEGER" size="10" foreignKey="true"/>
+        <column name="ObjectID" required="true" type="INTEGER" size="10" foreignKey="true"/>
+        <column name="ObjectInstanceID" required="true" type="INTEGER" size="10"/>
+        <column name="Value" required="true" type="VARCHAR" size="200"/>
+        <column name="CreatedOn" type="DATE" size="10"/>
+        <column name="ModifiedOn" type="DATE" size="10"/>
         <foreign-key foreignTable="addresstype" name="Address_AddressType_FK" onUpdate="restrict" onDelete="restrict">
             <reference local="AddressTypeID" foreign="AddressTypeID"/>
         </foreign-key>
@@ -25,11 +25,11 @@
             <index-column name="AddressTypeID"/>
         </index>
     </table>
-    <table name="addresstype" description="">
+    <table name="addresstype" description="" javaName="AddressType">
         <column name="AddressTypeID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-        <column name="AddressType" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-        <column name="CreatedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
-        <column name="ModifiedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="AddressType" required="true" type="VARCHAR" size="100"/>
+        <column name="CreatedOn" type="DATE" size="10"/>
+        <column name="ModifiedOn" type="DATE" size="10"/>
         <unique name="AddressType_AddressType_UN">
             <unique-column name="AddressType"/>
         </unique>
@@ -37,15 +37,13 @@
             <index-column name="AddressType"/>
         </index>
     </table>
-    <table name="department" description="">
+    <table name="department" description="" javaName="Department">
         <column name="DepartmentID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-        <column name="DepartmentName" primaryKey="false" required="true" type="VARCHAR" size="200"
-                autoIncrement="false"/>
-        <column name="ParentDepartmentID" primaryKey="false" required="true" type="INTEGER" size="10"
-                autoIncrement="false"/>
-        <column name="TenantID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-        <column name="CreatedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
-        <column name="ModifiedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="DepartmentName" required="true" type="VARCHAR" size="200"/>
+        <column name="ParentDepartmentID" foreignKey="true" required="true" type="INTEGER" size="10"/>
+        <column name="TenantID" foreignKey="true" required="true" type="INTEGER" size="10"/>
+        <column name="CreatedON" type="DATE" size="10"/>
+        <column name="ModifiedON" type="DATE" size="10"/>
         <foreign-key foreignTable="tenant" name="Department_TenantID_FK" onUpdate="restrict" onDelete="restrict">
             <reference local="TenantID" foreign="TenantID"/>
         </foreign-key>
@@ -58,9 +56,9 @@
             <index-column name="DepartmentName"/>
         </index>
     </table>
-    <table name="object" description="">
+    <table name="object" description="" javaName="Object">
         <column name="ObjectID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-        <column name="ObjectName" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+        <column name="ObjectName" required="true" type="VARCHAR" size="100"/>
         <unique name="Object_ObjectName_UN">
             <unique-column name="ObjectName"/>
         </unique>
@@ -68,18 +66,18 @@
             <index-column name="ObjectName"/>
         </index>
     </table>
-    <table name="person" description="">
+    <table name="person" description="" javaName="Person">
         <column name="PersonID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-        <column name="FirstName" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-        <column name="LastName" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-        <column name="Gender" primaryKey="false" required="true" type="BIT" autoIncrement="false"/>
-        <column name="DateOfBirth" primaryKey="false" required="true" type="DATE" size="10" autoIncrement="false"/>
-        <column name="IsActive" primaryKey="false" required="true" type="BIT" autoIncrement="false"/>
-        <column name="PersonTypeID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-        <column name="DepartmentID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-        <column name="TenantID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-        <column name="CreatedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
-        <column name="ModifiedON" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="FirstName" required="true" type="VARCHAR" size="100"/>
+        <column name="LastName" required="true" type="VARCHAR" size="100"/>
+        <column name="Gender" required="true" type="BIT"/>
+        <column name="DateOfBirth" required="true" type="DATE" size="10"/>
+        <column name="IsActive" required="true" type="BIT"/>
+        <column name="PersonTypeID" foreignKey="true" required="true" type="INTEGER" size="10"/>
+        <column name="DepartmentID" foreignKey="true" required="true" type="INTEGER" size="10"/>
+        <column name="TenantID" foreignKey="true" required="true" type="INTEGER" size="10"/>
+        <column name="CreatedON" type="DATE" size="10"/>
+        <column name="ModifiedON" type="DATE" size="10"/>
         <foreign-key foreignTable="department" name="Person_DepartmentID_FK" onUpdate="restrict" onDelete="restrict">
             <reference local="DepartmentID" foreign="DepartmentID"/>
         </foreign-key>
@@ -98,9 +96,9 @@
             <index-column name="IsActive"/>
         </index>
     </table>
-    <table name="persontype" description="">
+    <table name="persontype" description="" javaName="PersonType">
         <column name="PersonTypeID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-        <column name="Type" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+        <column name="Type" required="true" type="VARCHAR" size="100"/>
         <unique name="PersonType_TYPE_UN">
             <unique-column name="Type"/>
         </unique>
@@ -108,12 +106,12 @@
             <index-column name="Type"/>
         </index>
     </table>
-    <table name="tenant" description="">
+    <table name="tenant" description="" javaName="Tenant">
         <column name="TenantID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-        <column name="TenantName" primaryKey="false" required="true" type="VARCHAR" size="500" autoIncrement="false"/>
-        <column name="UrlParameter" primaryKey="false" required="true" type="VARCHAR" size="500" autoIncrement="false"/>
-        <column name="CreatedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
-        <column name="ModifiedOn" primaryKey="false" required="false" type="DATE" size="10" autoIncrement="false"/>
+        <column name="TenantName" required="true" type="VARCHAR" size="500"/>
+        <column name="UrlParameter" required="true" type="VARCHAR" size="500"/>
+        <column name="CreatedOn" type="DATE" size="10"/>
+        <column name="ModifiedOn" type="DATE" size="10"/>
         <unique name="Tenant_TenantName_UN">
             <unique-column name="TenantName"/>
         </unique>

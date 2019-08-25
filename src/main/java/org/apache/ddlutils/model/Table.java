@@ -49,6 +49,8 @@ public class Table implements Serializable
     private String _schema = null;
     /** The name. */
     private String _name = null;
+    /** The java name. */
+    private String _javaName = null;
     /** A description of the table. */
     private String _description = null;
     /** The table's type as read from the database. */
@@ -138,6 +140,26 @@ public class Table implements Serializable
     public void setName(String name)
     {
         _name = name;
+    }
+
+    /**
+     * Returns the java name of the table.
+     *
+     * @return The name
+     */
+    public String getJavaName()
+    {
+        return _javaName;
+    }
+
+    /**
+     * Sets the java name of the table.
+     *
+     * @param javaName The name
+     */
+    public void setJavaName(String javaName)
+    {
+        _javaName = javaName;
     }
 
     /**

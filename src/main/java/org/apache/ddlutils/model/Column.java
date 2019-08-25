@@ -48,6 +48,8 @@ public class Column implements Serializable
     private String _description;
     /** Whether the column is a primary key column. */
     private boolean _primaryKey;
+    /** Whether the column is a foreign key column. */
+    private boolean _foreignKey;
     /** Whether the column is required, ie. it must not contain <code>NULL</code>. */
     private boolean _required;
     /** Whether the column's value is incremented automatically. */
@@ -145,6 +147,26 @@ public class Column implements Serializable
     public void setPrimaryKey(boolean primaryKey)
     {
         _primaryKey = primaryKey;
+    }
+
+    /**
+     * Determines whether this column is a foreign key column.
+     *
+     * @return <code>true</code> if this column is a foreign key column
+     */
+    public boolean isForeignKey()
+    {
+        return _foreignKey;
+    }
+
+    /**
+     * Specifies whether this column is a foreign key column.
+     *
+     * @param foreignKey <code>true</code> if this column is a foreign key column
+     */
+    public void setForeignKey(boolean foreignKey)
+    {
+        _foreignKey = foreignKey;
     }
 
     /**

@@ -1517,6 +1517,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform
         table.setCatalog(targetTable.getCatalog());
         table.setSchema(targetTable.getSchema());
         table.setName(targetTable.getName() + "_");
+        table.setJavaName(targetTable.getJavaName());
         table.setType(targetTable.getType());
         for (int idx = 0; idx < targetTable.getColumnCount(); idx++)
         {

@@ -31,6 +31,7 @@ under the License.
   <class name="org.apache.ddlutils.model.Table">
     <element name="table">
       <attribute name="name"        property="name"/>
+      <attribute name="javaName"    property="javaName"/>
       <attribute name="description" property="description"/>
 
       <element property="columns"     updater="addColumn"/>
@@ -43,6 +44,7 @@ under the License.
     <element name="column">
       <attribute name="name"          property="name"/>
       <attribute name="primaryKey"    property="primaryKey"/>
+      <attribute name="foreignKey"    property="foreignKey"/>
       <attribute name="required"      property="required"/>
       <attribute name="type"          property="type"/>
       <attribute name="size"          property="size"/>

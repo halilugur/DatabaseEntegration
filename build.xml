@@ -55,7 +55,7 @@
   <taskdef classname="org.apache.ddlutils.task.DatabaseToDdlTask"
            name="databaseToDdl"
            classpathref="project-classpath"/>
-	
+
   <target name="createDb">
     <ddlToDatabase usedelimitedsqlidentifiers="${delimitedsqlidentifiers}"
                    catalogpattern="${catalogpattern}"
@@ -75,17 +75,24 @@
                    catalogpattern="${catalogpattern}"
                    schemapattern="${schemapattern}"
                    databasetype="${platform}">
+      <hibernateconfig
+              activehibernate="${hibernate.isactive}"
+              hibernatecascadetype="${hibernate.cascadeType}"
+              hibernatefetchtype="${hibernate.fetchType}"
+              hibernatemodelsgeneratedpath="${models.files.path}"
+              hibernatepackagename="${models.package.name}"/>
+
       <database driverclassname="${datasource.driverClassName}"
                 url="${datasource.url}"
                 username="${datasource.username}"
-                password="${datasource.password}"/> 
+                password="${datasource.password}"/>
       <fileset dir=".">
         <include name="${schemafiles}"/> 
       </fileset> 
 
       <writeschematodatabase alterdatabase="${alterdatabase}"
                              dodrops="true"
-                             failonerror="false"/> 
+                             failonerror="false"/>
     </ddlToDatabase> 
   </target>
 

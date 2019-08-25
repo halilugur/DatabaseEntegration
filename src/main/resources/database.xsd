@@ -265,6 +265,16 @@
       </xsd:annotation>
     </xsd:attribute>
 
+    <xsd:attribute name="javaName"
+                   type="xsd:string"
+                   use="required">
+      <xsd:annotation>
+        <xsd:documentation>
+          TODO
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+
     <xsd:attribute name="schema"
                    type="xsd:string"
                    use="optional">
@@ -350,6 +360,17 @@
     </xsd:attribute>
 
     <xsd:attribute name="primaryKey"
+                   type="xsd:boolean"
+                   use="optional"
+                   default="false">
+      <xsd:annotation>
+        <xsd:documentation>
+          TODO
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+
+    <xsd:attribute name="foreignKey"
                    type="xsd:boolean"
                    use="optional"
                    default="false">
