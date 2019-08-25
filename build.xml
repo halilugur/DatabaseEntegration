@@ -74,7 +74,8 @@
                    usedelimitedsqlidentifiers="${delimitedsqlidentifiers}"
                    catalogpattern="${catalogpattern}"
                    schemapattern="${schemapattern}"
-                   databasetype="${platform}">
+                   databasetype="${platform}"
+                   writedatabase="true">
       <hibernateconfig
               activehibernate="${hibernate.isactive}"
               hibernatecascadetype="${hibernate.cascadeType}"
@@ -100,7 +101,8 @@
     <databaseToDdl usedelimitedsqlidentifiers="${delimitedsqlidentifiers}"
                    catalogpattern="${catalogpattern}"
                    schemapattern="${schemapattern}"
-                   databasetype="${platform}">
+                   databasetype="${platform}"
+                   writedatabase="false">
       <database driverclassname="${datasource.driverClassName}"
                 url="${datasource.url}"
                 username="${datasource.username}"

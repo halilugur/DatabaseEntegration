@@ -992,6 +992,7 @@ public class DatabaseIO
         xmlWriter.indentIfPrettyPrinting(1);
         writeElementStart(xmlWriter, QNAME_ELEMENT_TABLE);
         writeAttribute(xmlWriter, QNAME_ATTRIBUTE_NAME,        table.getName());
+        writeAttribute(xmlWriter, QNAME_ATTRIBUTE_JAVA_NAME,   table.getJavaName());
         writeAttribute(xmlWriter, QNAME_ATTRIBUTE_DESCRIPTION, table.getDescription());
         if ((table.getColumnCount() > 0) || (table.getForeignKeyCount() > 0) || (table.getIndexCount() > 0))
         {

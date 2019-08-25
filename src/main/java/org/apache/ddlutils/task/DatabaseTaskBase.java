@@ -60,6 +60,8 @@ public abstract class DatabaseTaskBase extends Task
     /** The verbosity of the task's debug output. */
     private VerbosityLevel _verbosity = null;
 
+    private boolean _writeDatabase;
+
     private HibernateConfig hibernateConfig;
 
     /**
@@ -84,6 +86,17 @@ public abstract class DatabaseTaskBase extends Task
     public void setVerbosity(VerbosityLevel level)
     {
         _verbosity = level;
+    }
+
+    /**
+     * Specifies the verbosity of the task's debug output.
+     *
+     * @param writeDatabase The verbosity level
+     * @ant.not-required Default is <code>INFO</code>.
+     */
+    public void setWriteDatabase(boolean writeDatabase)
+    {
+        _writeDatabase = writeDatabase;
     }
 
     /**
@@ -389,7 +402,9 @@ public abstract class DatabaseTaskBase extends Task
         try
         {
             Database database = readModel();
-            ModelGenerator.getInstance(database, hibernateConfig).execute();
+            if (_writeDatabase){
+                ModelGenerator.getInstance(database, hibernateConfig).execute();
+            }
             executeCommands(database);
         }
         finally

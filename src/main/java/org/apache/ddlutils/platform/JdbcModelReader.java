@@ -27,14 +27,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.collections.map.ListOrderedMap;
 import org.apache.commons.lang.StringUtils;
@@ -586,6 +579,7 @@ public class JdbcModelReader
             table = new Table();
 
             table.setName(tableName);
+            table.setJavaName(tableName.substring(0, 1).toLowerCase(Locale.ENGLISH) + tableName.substring(1));
             table.setType((String)values.get("TABLE_TYPE"));
             table.setCatalog((String)values.get("TABLE_CAT"));
             table.setSchema((String)values.get("TABLE_SCHEM"));
