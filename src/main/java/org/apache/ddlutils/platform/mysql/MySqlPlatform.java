@@ -129,7 +129,7 @@ public class MySqlPlatform extends PlatformImplBase
      */
     protected ModelComparator getModelComparator()
     {
-        return new MySqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn());
+        return new MySqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn(), isInitialize());
     }
 
     /**

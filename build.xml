@@ -28,8 +28,8 @@
   <property file="build.properties"/>
 
   <!-- These properties can be overriden on the commandline using -D --> 
-  <property name="schemafiles" value="testmodel.xml"/>
-  <property name="schemafile" value="testmodel.xml"/>
+  <property name="schemafiles" value="schoolservice.xml"/>
+  <property name="schemafile" value="schoolservice.xml"/>
   <property name="datafile" value="testdata.xml"/>
   <property name="catalogpattern" value=""/>
   <property name="schemapattern" value=""/>
@@ -69,13 +69,14 @@
     </ddlToDatabase> 
   </target>
 
-  <target name="writeSchemaToDb">
+  <target name="update">
     <ddlToDatabase validatexml="false" 
                    usedelimitedsqlidentifiers="${delimitedsqlidentifiers}"
                    catalogpattern="${catalogpattern}"
                    schemapattern="${schemapattern}"
                    databasetype="${platform}"
-                   writedatabase="true">
+                   writedatabase="true"
+                   initialize="false">
       <hibernateconfig
               activehibernate="${hibernate.isactive}"
               hibernatecascadetype="${hibernate.cascadeType}"
@@ -92,9 +93,38 @@
       </fileset> 
 
       <writeschematodatabase alterdatabase="${alterdatabase}"
-                             dodrops="true"
-                             failonerror="false"/>
+                             dodrops="false"
+                             failonerror="false" />
     </ddlToDatabase> 
+  </target>
+
+  <target name="initialize">
+    <ddlToDatabase validatexml="false"
+                   usedelimitedsqlidentifiers="${delimitedsqlidentifiers}"
+                   catalogpattern="${catalogpattern}"
+                   schemapattern="${schemapattern}"
+                   databasetype="${platform}"
+                   writedatabase="true"
+                   initialize="true">
+      <hibernateconfig
+              activehibernate="${hibernate.isactive}"
+              hibernatecascadetype="${hibernate.cascadeType}"
+              hibernatefetchtype="${hibernate.fetchType}"
+              hibernatemodelsgeneratedpath="${models.files.path}"
+              hibernatepackagename="${models.package.name}"/>
+
+      <database driverclassname="${datasource.driverClassName}"
+                url="${datasource.url}"
+                username="${datasource.username}"
+                password="${datasource.password}"/>
+      <fileset dir=".">
+        <include name="${schemafiles}"/>
+      </fileset>
+
+      <writeschematodatabase alterdatabase="${alterdatabase}"
+                             dodrops="false"
+                             failonerror="false" />
+    </ddlToDatabase>
   </target>
 
   <target name="readSchemaFromDb">

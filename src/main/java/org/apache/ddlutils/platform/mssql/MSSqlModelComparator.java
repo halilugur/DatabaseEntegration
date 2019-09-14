@@ -56,9 +56,9 @@ public class MSSqlModelComparator extends ModelComparator
      */
     public MSSqlModelComparator(PlatformInfo                    platformInfo,
                                 TableDefinitionChangesPredicate tableDefChangePredicate,
-                                boolean                         caseSensitive)
+                                boolean                         caseSensitive, boolean initialize)
     {
-        super(platformInfo, tableDefChangePredicate, caseSensitive);
+        super(platformInfo, tableDefChangePredicate, caseSensitive,initialize);
         setGeneratePrimaryKeyChanges(false);
         setCanDropPrimaryKeyColumns(false);
     }

@@ -143,6 +143,17 @@ public interface Platform
     public boolean isDelimitedIdentifierModeOn();
 
     /**
+     * {@inheritDoc}
+     */
+    public boolean isInitialize();
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setInitialize(boolean initialize);
+
+
+    /**
      * Specifies whether delimited identifiers are used or normal SQL92 identifiers.
      *
      * @param delimitedIdentifierModeOn <code>true</code> if delimited identifiers shall be used

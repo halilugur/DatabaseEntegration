@@ -112,6 +112,8 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform
     private boolean _sqlCommentsOn = true;
     /** Whether delimited identifiers are used or not. */
     private boolean _delimitedIdentifierModeOn;
+    /** Whether initialize identifiers are used or not. */
+    private boolean _initialize;
     /** Whether identity override is enabled. */
     private boolean _identityOverrideOn;
     /** Whether read foreign keys shall be sorted alphabetically. */
@@ -223,6 +225,22 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform
             throw new DdlUtilsException("Platform " + getName() + " does not support delimited identifier");
         }
         _delimitedIdentifierModeOn = delimitedIdentifierModeOn;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isInitialize()
+    {
+        return _initialize;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setInitialize(boolean initialize)
+    {
+        this._initialize = initialize;
     }
 
     /**
@@ -616,7 +634,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform
     {
         return new ModelComparator(getPlatformInfo(),
                                    getTableDefinitionChangesPredicate(),
-                                   isDelimitedIdentifierModeOn());
+                                   isDelimitedIdentifierModeOn(), isInitialize());
     }
 
     /**

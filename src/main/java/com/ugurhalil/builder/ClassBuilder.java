@@ -2,6 +2,7 @@ package com.ugurhalil.builder;
 
 import com.ugurhalil.configuration.HibernateConfig;
 import com.ugurhalil.enums.DatabaseFieldType;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ForeignKey;
 import org.apache.ddlutils.model.Table;
@@ -53,7 +54,7 @@ public class ClassBuilder {
         if (hibernateConfig.is_activeHibernate()) {
             stringBuilder.append("@Entity(name = \"").append(table.getName()).append("\")\n");
         }
-        stringBuilder.append("public class ").append(table.getJavaName()).append(" implements Serializable").append(" {");
+        stringBuilder.append("public class ").append(table.getJavaName()).append("Model implements Serializable").append(" {");
         stringBuilder.append("\n");
         stringBuilder.append("\n");
 
@@ -62,27 +63,27 @@ public class ClassBuilder {
                 stringBuilder.append("    @Id\n");
                 stringBuilder.append("    @GeneratedValue(strategy = GenerationType.IDENTITY)\n");
             }
-            stringBuilder.append("    private ").append(getShortTypeName(DatabaseFieldType.valueOf(column.getType()).fieldType())).append(" ").append(toLoweCase(column.getName())).append(";").append("\n\n");
+            stringBuilder.append("    private ").append(getShortTypeName(DatabaseFieldType.valueOf(column.getType()).fieldType())).append(" ").append(getNameForColumn(column)).append(";").append("\n\n");
         });
 
         foreignKeys.forEach(foreignKey -> {
             if (hibernateConfig.is_activeHibernate()) {
-                stringBuilder.append("    @ManyToOne(fetch = FetchType.").append(hibernateConfig.get_hibernateFetchType()).append(", cascade = CascadeType.").append(hibernateConfig.get_hibernateCascadeType()).append(", )\n");
+                stringBuilder.append("    @ManyToOne(fetch = FetchType.").append(hibernateConfig.get_hibernateFetchType()).append(", cascade = CascadeType.").append(hibernateConfig.get_hibernateCascadeType()).append(")\n");
                 stringBuilder.append("    @JoinColumn(name = \"").append(foreignKey.getForeignTable().getName()).append("\")\n");
             }
-            stringBuilder.append("    private ").append(foreignKey.getForeignTable().getJavaName()).append(" ").append(toLoweCase(foreignKey.getFirstReference().getLocalColumn().getName())).append(";").append("\n\n");
+            stringBuilder.append("    private ").append(foreignKey.getForeignTable().getJavaName()).append(" ").append(getNameForColumn(foreignKey.getFirstReference().getLocalColumn())).append(";").append("\n\n");
         });
 
         columns.forEach(column -> {
             stringBuilder.append("\n");
-            stringBuilder.append("    public void").append(" set").append(column.getName()).append(" (").append(getShortTypeName(DatabaseFieldType.valueOf(column.getType()).fieldType())).append(" ").append(toLoweCase(column.getName())).append(") {").append("\n");
-            stringBuilder.append("        this.").append(column.getName()).append(" = ").append(toLoweCase(column.getName())).append(";");
+            stringBuilder.append("    public void").append(" set").append(getterAndSetterName(column)).append(" (").append(getShortTypeName(DatabaseFieldType.valueOf(column.getType()).fieldType())).append(" ").append(getNameForColumn(column)).append(") {").append("\n");
+            stringBuilder.append("        this.").append(column.getName()).append(" = ").append(getNameForColumn(column)).append(";");
             stringBuilder.append("\n");
             stringBuilder.append("    }");
             stringBuilder.append("\n");
             stringBuilder.append("\n");
-            stringBuilder.append("    public ").append(getShortTypeName(DatabaseFieldType.valueOf(column.getType()).fieldType())).append(" get").append(column.getName()).append(" () {").append("\n");
-            stringBuilder.append("        return this.").append(toLoweCase(column.getName())).append(";");
+            stringBuilder.append("    public ").append(getShortTypeName(DatabaseFieldType.valueOf(column.getType()).fieldType())).append(" get").append(getterAndSetterName(column)).append(" () {").append("\n");
+            stringBuilder.append("        return this.").append(getNameForColumn(column)).append(";");
             stringBuilder.append("\n");
             stringBuilder.append("    }");
             stringBuilder.append("\n");
@@ -90,14 +91,14 @@ public class ClassBuilder {
 
         foreignKeys.forEach(foreignKey -> {
             stringBuilder.append("\n");
-            stringBuilder.append("    public void").append(" set").append(foreignKey.getForeignTable().getJavaName()).append(" (").append(foreignKey.getForeignTable().getJavaName()).append(" ").append(toLoweCase(foreignKey.getForeignTable().getJavaName())).append(") {").append("\n");
-            stringBuilder.append("        this.").append(foreignKey.getForeignTable().getJavaName()).append(" = ").append(toLoweCase(foreignKey.getForeignTable().getJavaName())).append(";");
+            stringBuilder.append("    public void").append(" set").append(foreignKey.getForeignTable().getJavaName()).append(" (").append(foreignKey.getForeignTable().getJavaName()).append(" ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append(") {").append("\n");
+            stringBuilder.append("        this.").append(foreignKey.getForeignTable().getJavaName()).append(" = ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append(";");
             stringBuilder.append("\n");
             stringBuilder.append("    }");
             stringBuilder.append("\n");
             stringBuilder.append("\n");
             stringBuilder.append("    public ").append(foreignKey.getForeignTable().getJavaName()).append(" get").append(foreignKey.getForeignTable().getJavaName()).append(" () {").append("\n");
-            stringBuilder.append("        return this.").append(toLoweCase(foreignKey.getForeignTable().getJavaName())).append(";");
+            stringBuilder.append("        return this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append(";");
             stringBuilder.append("\n");
             stringBuilder.append("    }");
             stringBuilder.append("\n");
@@ -116,7 +117,7 @@ public class ClassBuilder {
             System.out.println(table.getJavaName());
         }
 
-        Files.write(Paths.get(hibernateConfig.get_hibernateModelsGeneratedPath() + "/" + table.getJavaName() + ".java"), stringBuilder.toString().getBytes());
+        Files.write(Paths.get(hibernateConfig.get_hibernateModelsGeneratedPath() + "/" + table.getJavaName() + "Model.java"), stringBuilder.toString().getBytes());
     }
 
     private String getShortTypeName(String longTypeName) {
@@ -127,10 +128,22 @@ public class ClassBuilder {
         return longTypeName;
     }
 
-    public String toLoweCase(String original) {
+    private String toCamelCase(String original) {
         if (original == null || original.length() == 0) {
             return original;
         }
         return original.substring(0, 1).toLowerCase(Locale.ENGLISH) + original.substring(1);
+    }
+
+    private String getterAndSetterName(Column column){
+        String name = getNameForColumn(column);
+        if (name == null || name.length() == 0) {
+            return name;
+        }
+        return name.substring(0, 1).toUpperCase(Locale.ENGLISH) + name.substring(1);
+    }
+
+    private String getNameForColumn(Column column){
+        return StringUtils.isNotBlank(column.getJavaName()) ? toCamelCase(column.getJavaName()) : toCamelCase(column.getName());
     }
 }

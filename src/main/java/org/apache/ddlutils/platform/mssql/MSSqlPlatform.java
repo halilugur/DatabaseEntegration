@@ -180,7 +180,7 @@ public class MSSqlPlatform extends PlatformImplBase
      */
     protected ModelComparator getModelComparator()
     {
-        return new MSSqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn());
+        return new MSSqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn(), isInitialize());
     }
 
     /**

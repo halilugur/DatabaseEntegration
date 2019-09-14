@@ -30,7 +30,8 @@ public enum DatabaseFieldType {
     DATE("java.sql.Date"),
     DATETIME("java.sql.Date"),
     TIME("java.sql.Date"),
-    TIMESTAMP("java.sql.Date");
+    TIMESTAMP("java.sql.Date"),
+    CLOB("String");
 
     private String fieldType;
 

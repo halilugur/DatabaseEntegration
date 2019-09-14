@@ -215,6 +215,17 @@ public abstract class DatabaseTaskBase extends Task
      *
      * @return <code>true</code> if the foreign keys shall be sorted
      */
+    public void setInitialize(boolean initialize)
+    {
+        _platformConf.setInitialize(initialize);
+    }
+
+    /**
+     * Determines whether a table's foreign keys read from a live database
+     * shall be sorted alphabetically. Is <code>false</code> by default.
+     *
+     * @return <code>true</code> if the foreign keys shall be sorted
+     */
     public boolean isSortForeignKeys()
     {
         return _platformConf.isSortForeignKeys();

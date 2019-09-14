@@ -35,7 +35,6 @@ public class ModelGenerator {
             try {
                 classBuilder.build(table,hibernateConfig);
             } catch (IOException e) {
-                System.out.println("HATA");
                 e.printStackTrace();
             }
         }

@@ -57,9 +57,9 @@ public class MySqlModelComparator extends ModelComparator
      */
     public MySqlModelComparator(PlatformInfo                    platformInfo,
                                 TableDefinitionChangesPredicate tableDefChangePredicate,
-                                boolean                         caseSensitive)
+                                boolean                         caseSensitive, boolean initialize)
     {
-        super(platformInfo, tableDefChangePredicate, caseSensitive);
+        super(platformInfo, tableDefChangePredicate, caseSensitive,initialize);
     }
 
     /**

@@ -22,7 +22,7 @@ package org.apache.ddlutils.util;
 import java.util.Collection;
 import java.util.Iterator;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.AssertionFailedError;
 
 import org.apache.commons.beanutils.DynaBean;

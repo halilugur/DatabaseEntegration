@@ -60,6 +60,7 @@ public class ModelComparator
     /** Whether {@link RemoveColumnChange} objects for primary key columns are enough or
         additional primary key change objects are necessary. */
     private boolean _canDropPrimaryKeyColumns = true;
+    private boolean _initialize;
 
     /**
      * Creates a new model comparator object.
@@ -71,11 +72,12 @@ public class ModelComparator
      */
     public ModelComparator(PlatformInfo                    platformInfo,
                            TableDefinitionChangesPredicate tableDefChangePredicate,
-                           boolean                         caseSensitive)
+                           boolean                         caseSensitive, boolean initialize)
     {
         _platformInfo           = platformInfo;
         _caseSensitive          = caseSensitive;
         _tableDefCangePredicate = tableDefChangePredicate;
+        _initialize = initialize;
     }
 
     /**
@@ -366,8 +368,9 @@ public class ModelComparator
 
         ArrayList tableDefinitionChanges = new ArrayList();
         Table     tmpTable               = _cloneHelper.clone(intermediateTable, true, false, intermediateModel, _caseSensitive);
-
-        tableDefinitionChanges.addAll(checkForRemovedColumns(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));
+        if (_initialize){
+            tableDefinitionChanges.addAll(checkForRemovedColumns(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));
+        }
         tableDefinitionChanges.addAll(checkForChangeOfColumnOrder(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));
         tableDefinitionChanges.addAll(checkForChangedColumns(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));
         tableDefinitionChanges.addAll(checkForAddedColumns(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));

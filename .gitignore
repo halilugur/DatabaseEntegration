@@ -4,3 +4,4 @@ models/*
 *.iml
 src/META-INF/*
 build/production/*
+target/*
