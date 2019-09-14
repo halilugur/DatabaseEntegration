@@ -22,6 +22,7 @@ package org.apache.ddlutils.task;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -31,7 +32,9 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.model.CloneHelper;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.model.Table;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
@@ -368,6 +371,24 @@ public abstract class DatabaseTaskBase extends Task
                 ((DatabaseCommand)cmd).setPlatformConfiguration(_platformConf);
             }
             cmd.execute(this, model);
+
+            Database database = getPlatform().readModelFromDatabase(model.getName(),
+                    getPlatformConfiguration().getCatalogPattern(),
+                    getPlatformConfiguration().getSchemaPattern(),
+                    new String[0]);
+
+            for (int i=0; i< model.getTableCount(); i++){
+                if (model.getTable(i).getName().equalsIgnoreCase(database.getTable(i).getName())){
+                    model.getTable(i).addExportForeignKeys(Arrays.asList(database.getTable(i).getExportForeignKeys()));
+                    for (int j = 0; j < model.getTable(i).getExportForeignKeyCount(); j++) {
+                        model.getTable(i).getExportForeignKey(j).setForeignTable(model.findTable(model.getTable(i).getExportForeignKey(j).getForeignTableName()));
+                    }
+                }
+            }
+
+            if (_writeDatabase){
+                ModelGenerator.getInstance(model, hibernateConfig).execute();
+            }
         }
     }
 
@@ -413,9 +434,6 @@ public abstract class DatabaseTaskBase extends Task
         try
         {
             Database database = readModel();
-            if (_writeDatabase){
-                ModelGenerator.getInstance(database, hibernateConfig).execute();
-            }
             executeCommands(database);
         }
         finally

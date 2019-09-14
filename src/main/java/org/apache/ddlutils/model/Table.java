@@ -59,6 +59,8 @@ public class Table implements Serializable
     private ArrayList _columns = new ArrayList();
     /** The foreign keys associated to this table. */
     private ArrayList _foreignKeys = new ArrayList();
+    /** The export foreign keys associated to this table. */
+    private ArrayList _exportForeignKeys = new ArrayList();
     /** The indices applied to this table. */
     private ArrayList _indices = new ArrayList();
 
@@ -319,6 +321,16 @@ public class Table implements Serializable
     }
 
     /**
+     * Returns the number of export foreign keys.
+     *
+     * @return The number of export foreign keys
+     */
+    public int getExportForeignKeyCount()
+    {
+        return _exportForeignKeys.size();
+    }
+
+    /**
      * Returns the foreign key at the given position.
      * 
      * @param idx The foreign key index
@@ -327,6 +339,17 @@ public class Table implements Serializable
     public ForeignKey getForeignKey(int idx)
     {
         return (ForeignKey)_foreignKeys.get(idx);
+    }
+
+    /**
+     * Returns the export foreign key at the given position.
+     *
+     * @param idx The export foreign key index
+     * @return The export foreign key
+     */
+    public ForeignKey getExportForeignKey(int idx)
+    {
+        return (ForeignKey)_exportForeignKeys.get(idx);
     }
 
     /**
@@ -340,6 +363,16 @@ public class Table implements Serializable
     }
 
     /**
+     * Returns the export foreign keys of this table.
+     *
+     * @return The export foreign keys
+     */
+    public ForeignKey[] getExportForeignKeys()
+    {
+        return (ForeignKey[])_exportForeignKeys.toArray(new ForeignKey[_exportForeignKeys.size()]);
+    }
+
+    /**
      * Adds the given foreign key.
      * 
      * @param foreignKey The foreign key
@@ -349,6 +382,19 @@ public class Table implements Serializable
         if (foreignKey != null)
         {
             _foreignKeys.add(foreignKey);
+        }
+    }
+
+    /**
+     * Adds the given export foreign key.
+     *
+     * @param foreignKey The export foreign key
+     */
+    public void addExportForeignKey(ForeignKey foreignKey)
+    {
+        if (foreignKey != null)
+        {
+            _exportForeignKeys.add(foreignKey);
         }
     }
 
@@ -367,6 +413,20 @@ public class Table implements Serializable
     }
 
     /**
+     * Adds the given export foreign key at the specified position.
+     *
+     * @param idx        The index to add the foreign key at
+     * @param foreignKey The export foreign key
+     */
+    public void addExportForeignKey(int idx, ForeignKey foreignKey)
+    {
+        if (foreignKey != null)
+        {
+            _exportForeignKeys.add(idx, foreignKey);
+        }
+    }
+
+    /**
      * Adds the given foreign keys.
      * 
      * @param foreignKeys The foreign keys
@@ -380,11 +440,34 @@ public class Table implements Serializable
     }
 
     /**
+     * Adds the given foreign keys.
+     *
+     * @param foreignKeys The export foreign keys
+     */
+    public void addExportForeignKeys(Collection foreignKeys)
+    {
+        if (!foreignKeys.isEmpty()){
+            for (Iterator it = foreignKeys.iterator(); it.hasNext();)
+            {
+                addExportForeignKey((ForeignKey)it.next());
+            }
+        }
+    }
+
+    /**
      * Removes all foreign keys.
      */
     public void removeAllForeignKeys()
     {
         _foreignKeys.clear();
+    }
+
+    /**
+     * Removes all export foreign keys.
+     */
+    public void removeAllExportForeignKeys()
+    {
+        _exportForeignKeys.clear();
     }
 
     /**
@@ -401,6 +484,19 @@ public class Table implements Serializable
     }
 
     /**
+     * Removes the given foreign key.
+     *
+     * @param foreignKey The foreign key to remove
+     */
+    public void removeExportForeignKey(ForeignKey foreignKey)
+    {
+        if (foreignKey != null)
+        {
+            _exportForeignKeys.remove(foreignKey);
+        }
+    }
+
+    /**
      * Removes the indicated foreign key.
      * 
      * @param idx The index of the foreign key to remove
@@ -408,6 +504,16 @@ public class Table implements Serializable
     public void removeForeignKey(int idx)
     {
         _foreignKeys.remove(idx);
+    }
+
+    /**
+     * Removes the indicated foreign key.
+     *
+     * @param idx The index of the foreign key to remove
+     */
+    public void removeExportForeignKey(int idx)
+    {
+        _exportForeignKeys.remove(idx);
     }
 
     /**

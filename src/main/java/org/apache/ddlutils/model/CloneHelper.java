@@ -57,6 +57,13 @@ public class CloneHelper
 
                 clonedTable.addForeignKey(clone(sourceFk, clonedTable, result, true));
             }
+
+            for (int fkIdx = 0; fkIdx < sourceTable.getExportForeignKeyCount(); fkIdx++)
+            {
+                ForeignKey sourceFk = sourceTable.getExportForeignKey(fkIdx);
+
+                clonedTable.addExportForeignKey(clone(sourceFk, clonedTable, result, true));
+            }
         }
         return result;
     }
@@ -100,6 +107,11 @@ public class CloneHelper
             for (int fkIdx = 0; fkIdx < source.getForeignKeyCount(); fkIdx++)
             {
                 result.addForeignKey(clone(source.getForeignKey(fkIdx), result, targetModel, caseSensitive));
+            }
+
+            for (int fkIdx = 0; fkIdx < source.getExportForeignKeyCount(); fkIdx++)
+            {
+                result.addExportForeignKey(clone(source.getExportForeignKey(fkIdx), result, targetModel, caseSensitive));
             }
         }
 

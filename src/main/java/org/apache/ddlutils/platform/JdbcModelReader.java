@@ -587,6 +587,7 @@ public class JdbcModelReader
 
             table.addColumns(readColumns(metaData, tableName));
             table.addForeignKeys(readForeignKeys(metaData, tableName));
+            table.addExportForeignKeys(readExportForeignKeys(metaData, tableName));
             table.addIndices(readIndices(metaData, tableName));
 
             Collection primaryKeys = readPrimaryKeyNames(metaData, tableName);
@@ -908,6 +909,37 @@ public class JdbcModelReader
     }
 
     /**
+     * Retrieves the foreign keys of the indicated table.
+     *
+     * @param metaData  The database meta data
+     * @param tableName The name of the table from which to retrieve FK information
+     * @return The foreign keys
+     */
+    protected Collection readExportForeignKeys(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException
+    {
+        Map       fks    = new ListOrderedMap();
+        ResultSet fkData = null;
+
+        try
+        {
+            fkData = metaData.getExportedForeignKeys(metaData.escapeForSearch(tableName));
+
+            while (fkData.next())
+            {
+                Map values = readColumns(fkData, getColumnsForFK());
+
+                readExportForeignKey(metaData, values, fks);
+            }
+        }
+        finally
+        {
+            closeResultSet(fkData);
+        }
+
+        return fks.values();
+    }
+
+    /**
      * Reads the next foreign key spec from the result set.
      *
      * @param metaData The database meta data
@@ -944,6 +976,51 @@ public class JdbcModelReader
         Reference ref = new Reference();
 
         ref.setForeignColumnName((String)values.get("PKCOLUMN_NAME"));
+        ref.setLocalColumnName((String)values.get("FKCOLUMN_NAME"));
+        if (values.containsKey("KEY_SEQ"))
+        {
+            ref.setSequenceValue(((Short)values.get("KEY_SEQ")).intValue());
+        }
+        fk.addReference(ref);
+    }
+
+    /**
+     * Reads the next foreign key spec from the result set.
+     *
+     * @param metaData The database meta data
+     * @param values   The foreign key meta data as defined by {@link #getColumnsForFK()}
+     * @param knownFks The already read foreign keys for the current table
+     */
+    protected void readExportForeignKey(DatabaseMetaDataWrapper metaData, Map values, Map knownFks) throws SQLException
+    {
+        String     fkName = (String)values.get("FK_NAME");
+        ForeignKey fk     = (ForeignKey)knownFks.get(fkName);
+
+        if (fk == null)
+        {
+            fk = new ForeignKey(fkName);
+            fk.setForeignTableName((String)values.get("FKTABLE_NAME"));
+
+            CascadeActionEnum onUpdateAction = convertAction((Short)values.get("UPDATE_RULE"));
+            CascadeActionEnum onDeleteAction = convertAction((Short)values.get("DELETE_RULE"));
+
+            if (onUpdateAction == null)
+            {
+                onUpdateAction = getPlatformInfo().getDefaultOnUpdateAction();
+            }
+            if (onDeleteAction == null)
+            {
+                onDeleteAction = getPlatformInfo().getDefaultOnDeleteAction();
+            }
+
+            fk.setOnUpdate(onUpdateAction);
+            fk.setOnDelete(onDeleteAction);
+            knownFks.put(fkName, fk);
+        }
+
+        Reference ref = new Reference();
+
+        ref.setForeignColumnName((String)values.get("FKTABLE_NAME"));
         ref.setLocalColumnName((String)values.get("FKCOLUMN_NAME"));
         if (values.containsKey("KEY_SEQ"))
         {
