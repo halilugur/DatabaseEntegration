@@ -35,7 +35,7 @@ public class ClassBuilder {
         List<ForeignKey> exportForeignKeys = new ArrayList<>(Arrays.asList(table.getExportForeignKeys()));
 
         if (hibernateConfig.is_activeHibernate()) {
-            stringBuilder.append("import org.hibernate.annotations.Type;").append("\n");
+            stringBuilder.append("import javax.persistence.*;").append("\n");
         }
         columns.stream().filter(column -> DatabaseFieldType.valueOf(column.getType()).fieldType().contains(".")).collect(Collectors.toSet()).forEach(column -> {
             if (!stringBuilder.toString().contains("import " + DatabaseFieldType.valueOf(column.getType()).fieldType())) {
@@ -56,7 +56,7 @@ public class ClassBuilder {
         if (hibernateConfig.is_activeHibernate()) {
             stringBuilder.append("@Entity(name = \"").append(table.getName()).append("\")\n");
         }
-        stringBuilder.append("public class ").append(table.getJavaName()).append("Model implements Serializable").append(" {");
+        stringBuilder.append("public class ").append(table.getJavaName()).append(" implements Serializable").append(" {");
         stringBuilder.append("\n");
         stringBuilder.append("\n");
 
@@ -139,7 +139,7 @@ public class ClassBuilder {
             System.out.println(table.getJavaName());
         }
 
-        Files.write(Paths.get(hibernateConfig.get_hibernateModelsGeneratedPath() + "/" + table.getJavaName() + "Model.java"), stringBuilder.toString().getBytes());
+        Files.write(Paths.get(hibernateConfig.get_hibernateModelsGeneratedPath() + "/" + table.getJavaName() + ".java"), stringBuilder.toString().getBytes());
     }
 
     private String getShortTypeName(String longTypeName) {
