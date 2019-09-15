@@ -83,7 +83,7 @@ public class ClassBuilder {
         columns.forEach(column -> {
             stringBuilder.append("\n");
             stringBuilder.append("    public void").append(" set").append(getterAndSetterName(column)).append(" (").append(getShortTypeName(DatabaseFieldType.valueOf(column.getType()).fieldType())).append(" ").append(getNameForColumn(column)).append(") {").append("\n");
-            stringBuilder.append("        this.").append(column.getName()).append(" = ").append(getNameForColumn(column)).append(";");
+            stringBuilder.append("        this.").append(getNameForColumn(column)).append(" = ").append(getNameForColumn(column)).append(";");
             stringBuilder.append("\n");
             stringBuilder.append("    }");
             stringBuilder.append("\n");
