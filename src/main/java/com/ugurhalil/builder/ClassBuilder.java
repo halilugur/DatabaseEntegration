@@ -43,9 +43,9 @@ public class ClassBuilder {
             }
         });
 
-        if (hibernateConfig.isExportTableActive()){
-            if (!exportForeignKeys.isEmpty()){
-                stringBuilder.append("import ").append("java.util.List").append(";").append("\n");
+        if (hibernateConfig.isExportTableActive() && hibernateConfig.is_activeHibernate()) {
+            if (!exportForeignKeys.isEmpty()) {
+                stringBuilder.append("import ").append("java.util.Set").append(";").append("\n");
             }
         }
 
@@ -79,9 +79,12 @@ public class ClassBuilder {
             stringBuilder.append("    private ").append(foreignKey.getForeignTable().getJavaName()).append(" ").append(getNameForColumn(foreignKey.getFirstReference().getLocalColumn())).append(";").append("\n\n");
         });
 
-        if (hibernateConfig.isExportTableActive()) {
+        if (hibernateConfig.isExportTableActive() && hibernateConfig.is_activeHibernate()) {
             exportForeignKeys.forEach(foreignKey -> {
-                stringBuilder.append("    private ").append("List<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List").append(";").append("\n\n");
+                if (hibernateConfig.is_activeHibernate()) {
+                    stringBuilder.append("    @OneToMany(fetch = FetchType.").append(hibernateConfig.get_hibernateFetchType()).append(", cascade = CascadeType.").append(hibernateConfig.get_hibernateCascadeType()).append(")\n");
+                }
+                stringBuilder.append("    private ").append("Set<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("Set").append(";").append("\n\n");
             });
         }
 
@@ -115,17 +118,17 @@ public class ClassBuilder {
             stringBuilder.append("\n");
         });
 
-        if (hibernateConfig.isExportTableActive()) {
+        if (hibernateConfig.isExportTableActive() && hibernateConfig.is_activeHibernate()) {
             exportForeignKeys.forEach(foreignKey -> {
                 stringBuilder.append("\n");
-                stringBuilder.append("    public void").append(" set").append(foreignKey.getForeignTable().getJavaName()).append(" (List<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List) {").append("\n");
-                stringBuilder.append("        this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List = ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List;");
+                stringBuilder.append("    public void").append(" set").append(foreignKey.getForeignTable().getJavaName()).append(" (Set<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("Set) {").append("\n");
+                stringBuilder.append("        this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("Set = ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("Set;");
                 stringBuilder.append("\n");
                 stringBuilder.append("    }");
                 stringBuilder.append("\n");
                 stringBuilder.append("\n");
-                stringBuilder.append("    public List<").append(foreignKey.getForeignTable().getJavaName()).append("> get").append(foreignKey.getForeignTable().getJavaName()).append("List () {").append("\n");
-                stringBuilder.append("        return this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List;");
+                stringBuilder.append("    public Set<").append(foreignKey.getForeignTable().getJavaName()).append("> get").append(foreignKey.getForeignTable().getJavaName()).append("Set () {").append("\n");
+                stringBuilder.append("        return this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("Set;");
                 stringBuilder.append("\n");
                 stringBuilder.append("    }");
                 stringBuilder.append("\n");
@@ -163,7 +166,7 @@ public class ClassBuilder {
         return original.substring(0, 1).toLowerCase(Locale.ENGLISH) + original.substring(1);
     }
 
-    private String getterAndSetterName(Column column){
+    private String getterAndSetterName(Column column) {
         String name = getNameForColumn(column);
         if (name == null || name.length() == 0) {
             return name;
@@ -171,7 +174,7 @@ public class ClassBuilder {
         return name.substring(0, 1).toUpperCase(Locale.ENGLISH) + name.substring(1);
     }
 
-    private String getNameForColumn(Column column){
+    private String getNameForColumn(Column column) {
         return StringUtils.isNotBlank(column.getJavaName()) ? toCamelCase(column.getJavaName()) : toCamelCase(column.getName());
     }
 }

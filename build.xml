@@ -113,7 +113,7 @@
               hibernatefetchtype="${hibernate.fetchType}"
               hibernatemodelsgeneratedpath="${models.files.path}"
               hibernatepackagename="${models.package.name}"
-              exportTableActive="false"/>
+              exportTableActive="true"/>
 
       <database driverclassname="${datasource.driverClassName}"
                 url="${datasource.url}"
