@@ -74,7 +74,7 @@ public class ClassBuilder {
         foreignKeys.forEach(foreignKey -> {
             if (hibernateConfig.is_activeHibernate()) {
                 stringBuilder.append("    @ManyToOne(fetch = FetchType.").append(hibernateConfig.get_hibernateFetchType()).append(", cascade = CascadeType.").append(hibernateConfig.get_hibernateCascadeType()).append(")\n");
-                stringBuilder.append("    @JoinColumn(name = \"").append(foreignKey.getForeignTable().getName()).append("\")\n");
+                stringBuilder.append("    @JoinColumn(name = \"").append(foreignKey.getFirstReference().getLocalColumnName()).append("\")\n");
             }
             stringBuilder.append("    private ").append(foreignKey.getForeignTable().getJavaName()).append(" ").append(getNameForColumn(foreignKey.getFirstReference().getLocalColumn())).append(";").append("\n\n");
         });
