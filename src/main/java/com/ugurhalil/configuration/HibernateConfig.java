@@ -11,6 +11,7 @@ public class HibernateConfig {
     private String _hibernateCascadeType;
     private String _hibernatePackageName;
     private String _hibernateModelsGeneratedPath;
+    private boolean _exportTableActive;
 
     public void setActiveHibernate(boolean activeHibernate)
     {
@@ -51,5 +52,13 @@ public class HibernateConfig {
 
     public String get_hibernateModelsGeneratedPath() {
         return _hibernateModelsGeneratedPath;
+    }
+
+    public boolean isExportTableActive() {
+        return _exportTableActive;
+    }
+
+    public void setExportTableActive(boolean exportTableActive) {
+        this._exportTableActive = exportTableActive;
     }
 }

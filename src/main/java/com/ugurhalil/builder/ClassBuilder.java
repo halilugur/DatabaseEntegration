@@ -43,9 +43,12 @@ public class ClassBuilder {
             }
         });
 
-        if (!exportForeignKeys.isEmpty()){
-            stringBuilder.append("import ").append("java.util.List").append(";").append("\n");
+        if (hibernateConfig.isExportTableActive()){
+            if (!exportForeignKeys.isEmpty()){
+                stringBuilder.append("import ").append("java.util.List").append(";").append("\n");
+            }
         }
+
 
         stringBuilder.append("\n");
         stringBuilder.append("/**\n");
@@ -76,9 +79,11 @@ public class ClassBuilder {
             stringBuilder.append("    private ").append(foreignKey.getForeignTable().getJavaName()).append(" ").append(getNameForColumn(foreignKey.getFirstReference().getLocalColumn())).append(";").append("\n\n");
         });
 
-        exportForeignKeys.forEach(foreignKey -> {
-            stringBuilder.append("    private ").append("List<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List").append(";").append("\n\n");
-        });
+        if (hibernateConfig.isExportTableActive()) {
+            exportForeignKeys.forEach(foreignKey -> {
+                stringBuilder.append("    private ").append("List<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List").append(";").append("\n\n");
+            });
+        }
 
         columns.forEach(column -> {
             stringBuilder.append("\n");
@@ -110,21 +115,22 @@ public class ClassBuilder {
             stringBuilder.append("\n");
         });
 
-        exportForeignKeys.forEach(foreignKey -> {
-            stringBuilder.append("\n");
-            stringBuilder.append("    public void").append(" set").append(foreignKey.getForeignTable().getJavaName()).append(" (List<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List) {").append("\n");
-            stringBuilder.append("        this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List = ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List;");
-            stringBuilder.append("\n");
-            stringBuilder.append("    }");
-            stringBuilder.append("\n");
-            stringBuilder.append("\n");
-            stringBuilder.append("    public List<").append(foreignKey.getForeignTable().getJavaName()).append("> get").append(foreignKey.getForeignTable().getJavaName()).append("List () {").append("\n");
-            stringBuilder.append("        return this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List;");
-            stringBuilder.append("\n");
-            stringBuilder.append("    }");
-            stringBuilder.append("\n");
-        });
-
+        if (hibernateConfig.isExportTableActive()) {
+            exportForeignKeys.forEach(foreignKey -> {
+                stringBuilder.append("\n");
+                stringBuilder.append("    public void").append(" set").append(foreignKey.getForeignTable().getJavaName()).append(" (List<").append(foreignKey.getForeignTable().getJavaName()).append("> ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List) {").append("\n");
+                stringBuilder.append("        this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List = ").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List;");
+                stringBuilder.append("\n");
+                stringBuilder.append("    }");
+                stringBuilder.append("\n");
+                stringBuilder.append("\n");
+                stringBuilder.append("    public List<").append(foreignKey.getForeignTable().getJavaName()).append("> get").append(foreignKey.getForeignTable().getJavaName()).append("List () {").append("\n");
+                stringBuilder.append("        return this.").append(toCamelCase(foreignKey.getForeignTable().getJavaName())).append("List;");
+                stringBuilder.append("\n");
+                stringBuilder.append("    }");
+                stringBuilder.append("\n");
+            });
+        }
         stringBuilder.append("\n");
         stringBuilder.append("}");
 

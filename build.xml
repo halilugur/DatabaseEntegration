@@ -82,7 +82,8 @@
               hibernatecascadetype="${hibernate.cascadeType}"
               hibernatefetchtype="${hibernate.fetchType}"
               hibernatemodelsgeneratedpath="${models.files.path}"
-              hibernatepackagename="${models.package.name}"/>
+              hibernatepackagename="${models.package.name}"
+              exportTableActive="false"/>
 
       <database driverclassname="${datasource.driverClassName}"
                 url="${datasource.url}"
@@ -111,7 +112,8 @@
               hibernatecascadetype="${hibernate.cascadeType}"
               hibernatefetchtype="${hibernate.fetchType}"
               hibernatemodelsgeneratedpath="${models.files.path}"
-              hibernatepackagename="${models.package.name}"/>
+              hibernatepackagename="${models.package.name}"
+              exportTableActive="false"/>
 
       <database driverclassname="${datasource.driverClassName}"
                 url="${datasource.url}"
